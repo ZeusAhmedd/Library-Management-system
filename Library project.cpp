@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 const int MAX_BOOKS = 100; // Maximum number of books
 const int TITLE_LENGTH = 100; // Maximum length of book title
@@ -12,9 +13,24 @@ struct Book {
     int isAvailable; // 1 if available, 0 if borrowed
 };
 
+// Function to convert a string to lowercase
+void toLower(char *str) {
+    for (int i = 0; str[i]; i++) {
+        str[i] = tolower(str[i]);
+    }
+}
+
 void searchBook(struct Book library[], int bookCount, const char *searchTitle) {
+    char searchTitleLower[TITLE_LENGTH];
+    strcpy(searchTitleLower, searchTitle);
+    toLower(searchTitleLower);
+
     for (int i = 0; i < bookCount; i++) {
-        if (strcmp(library[i].title, searchTitle) == 0) {
+        char bookTitleLower[TITLE_LENGTH];
+        strcpy(bookTitleLower, library[i].title);
+        toLower(bookTitleLower);
+
+        if (strcmp(bookTitleLower, searchTitleLower) == 0) {
             if (library[i].isAvailable) {
                 printf("The book '%s' is available at %s.\n", library[i].title, library[i].location);
             } else {
@@ -31,9 +47,8 @@ int main() {
         {"C Programming", "Row 1, Aisle 1", "", 1},
         {"Data Structures", "Row 1, Aisle 2", "", 0},
         {"Algorithms", "Row 2, Aisle 1", "Alice", 0},
-        
         {"Operating Systems", "Row 2, Aisle 2", "", 1},
-        {"Database Systems", "Row 3, Aisle 1", "Ali", 0}
+        {"Database Systems", "Row 3, Aisle 1", "Bob", 0}
     };
     
     int bookCount = 5;
